@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- 缓存器，用于缓存shiro相关的数据 -->
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+
+    <!-- 配置数据源-->
+    <bean id="jdbcRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="authenticationQuery" value="select password from t_user where name = ?"></property>
+        <property name="userRolesQuery" value="select r.name from t_role r, t_user u, t_user_role ur where r.id = ur.role_id and u.id = ur.user_id and u.name = ?" />
+        <property name="permissionsQuery" value="select p.permission from t_permission p, t_role_permission rp, t_role r where p.id = rp.permission_id and rp.role_id = r.id and r.name = ?" />
+        <property name="permissionsLookupEnabled" value="true" />
+    </bean>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <!-- 我们自定义的realm -->
+        <property name="realm" ref="jdbcRealm"/>
+        <!-- 缓存管理器 -->
+        <property name="cacheManager" ref="cacheManager"/>
+
+    </bean>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 权限管理器 -->
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 登录地址 -->
+        <property name="loginUrl" value="/WEB-INF/views/login.jsp"/>
+        <!-- 错误页面 -->
+        <property name="unauthorizedUrl" value="/WEB-INF/views/unauth.jsp"/>
+        <!-- 权限配置 -->
+        <property name="filterChainDefinitions">
+            <value>
+                /login = anon
+                /css/**=anon
+                /images/**=anon
+                /js/**=anon
+            </value>
+        </property>
+    </bean>
+
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+</beans>
