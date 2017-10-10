@@ -1,0 +1,20 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.th.dao.PermissionDAO">
+
+    <resultMap id="permissionMap" type="permission">
+
+    </resultMap>
+
+    <select id="listPermissions" parameterType="string" resultType="list">
+        select p.permission from t_permission p, t_user u, t_user_role ur, t_role_permission rp
+        where u.id = ur.user_id and ur.role_id = rp.role_id and p.id = rp.permission_id and u.name = #{username}
+    </select>
+
+    <select id="listByModule" parameterType="integer" resultMap="permissionMap">
+        select * from t_permission where module_id = #{moduleId}
+    </select>
+
+</mapper>
