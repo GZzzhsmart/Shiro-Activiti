@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="request_emp" name="request_emp" isExecutable="true">
+    <startEvent id="startProcess"></startEvent>
+    <userTask id="HR" name="人事部发送岗位需求" activiti:candidateUsers="HR1,HR2"></userTask>
+    <sequenceFlow id="sid-C08491D4-C5D7-4E9A-947C-8FE8167E6D8F" sourceRef="startProcess" targetRef="HR"></sequenceFlow>
+    <userTask id="emp" name="应聘者投送简历" activiti:candidateUsers="emp1,emp2"></userTask>
+    <sequenceFlow id="sid-B8D62D18-39CE-4369-9513-73076A4D6516" sourceRef="HR" targetRef="emp"></sequenceFlow>
+    <exclusiveGateway id="endage" name="年龄符合要求"></exclusiveGateway>
+    <endEvent id="end" name="岗位招聘结束"></endEvent>
+    <sequenceFlow id="age" name="年龄小于18" sourceRef="emp" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${age<18}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="arcage" name="年龄判断" sourceRef="emp" targetRef="endage">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${age>=18}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="request" name="人事部发送面试邀请" activiti:candidateUsers="HR1,HR2"></userTask>
+    <sequenceFlow id="sid-B54CA33B-083B-49B6-9EC7-4CA2BF9CE2AD" sourceRef="endage" targetRef="request"></sequenceFlow>
+    <exclusiveGateway id="isagree" name="是否接受面试邀请"></exclusiveGateway>
+    <sequenceFlow id="notagree" name="应聘者不接受面试邀请" sourceRef="request" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isAgree==false}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="requestagree" name="应聘者参加到公司报道并参加笔试" activiti:candidateUsers="emp1,emp2"></userTask>
+    <sequenceFlow id="sid-8C500B69-E52B-4E76-8190-DA9B31B40D8A" sourceRef="isagree" targetRef="requestagree"></sequenceFlow>
+    <exclusiveGateway id="istest" name="是否通过笔试"></exclusiveGateway>
+    <sequenceFlow id="testnotagree" name="笔试小于80不通过" sourceRef="requestagree" targetRef="emp">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${grade<80}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="facetest" name="应聘者参加面试" activiti:candidateUsers="emp1,emp2"></userTask>
+    <sequenceFlow id="sid-8B53E6AA-2368-4172-A62E-05B141F18411" sourceRef="istest" targetRef="facetest"></sequenceFlow>
+    <exclusiveGateway id="sid-459D656F-1F1A-4CCD-B356-95736D8FC745"></exclusiveGateway>
+    <sequenceFlow id="faceagree" name="面试通过，并且薪资合理" sourceRef="facetest" targetRef="sid-459D656F-1F1A-4CCD-B356-95736D8FC745">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${facetest==true}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-B7EF301B-4206-4454-83E8-FCD38FE07EE9" sourceRef="facetest"></sequenceFlow>
+    <sequenceFlow id="sid-61F35AA4-219E-4BB8-B20A-2A9224BAE681" sourceRef="sid-459D656F-1F1A-4CCD-B356-95736D8FC745" targetRef="end"></sequenceFlow>
+    <sequenceFlow id="testagree" name="笔试分数大于80分" sourceRef="requestagree" targetRef="istest">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${grade>=80}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="agree" name="接受面试邀请" sourceRef="request" targetRef="isagree">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isAgree==true}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_request_emp">
+    <bpmndi:BPMNPlane bpmnElement="request_emp" id="BPMNPlane_request_emp">
+      <bpmndi:BPMNShape bpmnElement="startProcess" id="BPMNShape_startProcess">
+        <omgdc:Bounds height="30.0" width="30.0" x="0.0" y="89.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="HR" id="BPMNShape_HR">
+        <omgdc:Bounds height="80.0" width="100.0" x="60.0" y="64.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="emp" id="BPMNShape_emp">
+        <omgdc:Bounds height="80.0" width="100.0" x="195.0" y="64.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endage" id="BPMNShape_endage">
+        <omgdc:Bounds height="40.0" width="40.0" x="345.0" y="84.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="28.0" width="28.0" x="1155.0" y="90.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="request" id="BPMNShape_request">
+        <omgdc:Bounds height="80.0" width="100.0" x="435.0" y="64.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="isagree" id="BPMNShape_isagree">
+        <omgdc:Bounds height="40.0" width="40.0" x="600.0" y="84.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="requestagree" id="BPMNShape_requestagree">
+        <omgdc:Bounds height="80.0" width="100.0" x="690.0" y="64.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="istest" id="BPMNShape_istest">
+        <omgdc:Bounds height="40.0" width="40.0" x="840.0" y="84.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="facetest" id="BPMNShape_facetest">
+        <omgdc:Bounds height="80.0" width="100.0" x="930.0" y="64.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-459D656F-1F1A-4CCD-B356-95736D8FC745" id="BPMNShape_sid-459D656F-1F1A-4CCD-B356-95736D8FC745">
+        <omgdc:Bounds height="40.0" width="40.0" x="1080.0" y="84.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="testnotagree" id="BPMNEdge_testnotagree">
+        <omgdi:waypoint x="740.0" y="64.0"></omgdi:waypoint>
+        <omgdi:waypoint x="740.0" y="33.0"></omgdi:waypoint>
+        <omgdi:waypoint x="245.0" y="33.0"></omgdi:waypoint>
+        <omgdi:waypoint x="245.0" y="64.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-8C500B69-E52B-4E76-8190-DA9B31B40D8A" id="BPMNEdge_sid-8C500B69-E52B-4E76-8190-DA9B31B40D8A">
+        <omgdi:waypoint x="639.5798319327731" y="104.4201680672269"></omgdi:waypoint>
+        <omgdi:waypoint x="690.0" y="104.2092050209205"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="testagree" id="BPMNEdge_testagree">
+        <omgdi:waypoint x="790.0" y="104.20746887966806"></omgdi:waypoint>
+        <omgdi:waypoint x="840.4166666666666" y="104.41666666666667"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="agree" id="BPMNEdge_agree">
+        <omgdi:waypoint x="535.0" y="104.18450184501845"></omgdi:waypoint>
+        <omgdi:waypoint x="600.4259259259259" y="104.42592592592592"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-C08491D4-C5D7-4E9A-947C-8FE8167E6D8F" id="BPMNEdge_sid-C08491D4-C5D7-4E9A-947C-8FE8167E6D8F">
+        <omgdi:waypoint x="30.0" y="104.0"></omgdi:waypoint>
+        <omgdi:waypoint x="60.0" y="104.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-B8D62D18-39CE-4369-9513-73076A4D6516" id="BPMNEdge_sid-B8D62D18-39CE-4369-9513-73076A4D6516">
+        <omgdi:waypoint x="160.0" y="104.0"></omgdi:waypoint>
+        <omgdi:waypoint x="195.0" y="104.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="faceagree" id="BPMNEdge_faceagree">
+        <omgdi:waypoint x="1030.0" y="104.20746887966806"></omgdi:waypoint>
+        <omgdi:waypoint x="1080.4166666666667" y="104.41666666666667"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-8B53E6AA-2368-4172-A62E-05B141F18411" id="BPMNEdge_sid-8B53E6AA-2368-4172-A62E-05B141F18411">
+        <omgdi:waypoint x="879.5798319327731" y="104.4201680672269"></omgdi:waypoint>
+        <omgdi:waypoint x="930.0" y="104.2092050209205"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-61F35AA4-219E-4BB8-B20A-2A9224BAE681" id="BPMNEdge_sid-61F35AA4-219E-4BB8-B20A-2A9224BAE681">
+        <omgdi:waypoint x="1119.639705882353" y="104.36029411764706"></omgdi:waypoint>
+        <omgdi:waypoint x="1155.0003729405028" y="104.10218705882845"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="arcage" id="BPMNEdge_arcage">
+        <omgdi:waypoint x="295.0" y="104.20746887966806"></omgdi:waypoint>
+        <omgdi:waypoint x="345.4166666666667" y="104.41666666666667"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="notagree" id="BPMNEdge_notagree">
+        <omgdi:waypoint x="485.0" y="64.0"></omgdi:waypoint>
+        <omgdi:waypoint x="485.0" y="18.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1169.0" y="18.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1169.0" y="90.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="age" id="BPMNEdge_age">
+        <omgdi:waypoint x="245.0" y="144.0"></omgdi:waypoint>
+        <omgdi:waypoint x="245.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1169.0" y="217.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1169.0" y="118.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-B54CA33B-083B-49B6-9EC7-4CA2BF9CE2AD" id="BPMNEdge_sid-B54CA33B-083B-49B6-9EC7-4CA2BF9CE2AD">
+        <omgdi:waypoint x="384.5798319327731" y="104.4201680672269"></omgdi:waypoint>
+        <omgdi:waypoint x="435.0" y="104.2092050209205"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

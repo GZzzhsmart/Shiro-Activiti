@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="leave_process_gateway" name="leave_process_gateway" isExecutable="true">
+    <startEvent id="startevent1" name="Start" activiti:formKey="emp_form">
+      <extensionElements>
+        <activiti:formProperty id="emp_name" name="emp_name" type="string"></activiti:formProperty>
+      </extensionElements>
+    </startEvent>
+    <userTask id="emp_submit" name="员工提交请假申请" activiti:candidateUsers="emp1,emp2,emp3"></userTask>
+    <userTask id="boss_check" name="老板审核" activiti:candidateUsers="boss1,boss2"></userTask>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow2" sourceRef="emp_submit" targetRef="boss_check"></sequenceFlow>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="emp_submit"></sequenceFlow>
+    <exclusiveGateway id="sid-CD459FB5-801B-4DCE-87F9-FC4FAE0D96DD"></exclusiveGateway>
+    <sequenceFlow id="sid-D465A147-DCE3-44AA-89B0-0EA41D9FE129" sourceRef="boss_check" targetRef="sid-CD459FB5-801B-4DCE-87F9-FC4FAE0D96DD"></sequenceFlow>
+    <sequenceFlow id="sid-CC3BBECA-9813-49BC-A7AB-DED669E97636" sourceRef="sid-CD459FB5-801B-4DCE-87F9-FC4FAE0D96DD" targetRef="emp_submit">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${days >= 10}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sid-AEE61B70-DB5D-4B3F-BECB-5742ACDDBCA2" sourceRef="sid-CD459FB5-801B-4DCE-87F9-FC4FAE0D96DD" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${days < 10}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_leave_process_gateway">
+    <bpmndi:BPMNPlane bpmnElement="leave_process_gateway" id="BPMNPlane_leave_process_gateway">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="30.0" width="30.0" x="30.0" y="177.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="emp_submit" id="BPMNShape_emp_submit">
+        <omgdc:Bounds height="55.0" width="105.0" x="135.0" y="165.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boss_check" id="BPMNShape_boss_check">
+        <omgdc:Bounds height="55.0" width="105.0" x="330.0" y="165.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="28.0" width="28.0" x="795.0" y="178.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-CD459FB5-801B-4DCE-87F9-FC4FAE0D96DD" id="BPMNShape_sid-CD459FB5-801B-4DCE-87F9-FC4FAE0D96DD">
+        <omgdc:Bounds height="40.0" width="40.0" x="570.0" y="172.5"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-AEE61B70-DB5D-4B3F-BECB-5742ACDDBCA2" id="BPMNEdge_sid-AEE61B70-DB5D-4B3F-BECB-5742ACDDBCA2">
+        <omgdi:waypoint x="609.5435779816514" y="192.95642201834863"></omgdi:waypoint>
+        <omgdi:waypoint x="795.0000366550199" y="192.53203652939357"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="60.0" y="192.5"></omgdi:waypoint>
+        <omgdi:waypoint x="135.0" y="192.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="240.0" y="192.5"></omgdi:waypoint>
+        <omgdi:waypoint x="330.0" y="192.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-D465A147-DCE3-44AA-89B0-0EA41D9FE129" id="BPMNEdge_sid-D465A147-DCE3-44AA-89B0-0EA41D9FE129">
+        <omgdi:waypoint x="435.0" y="192.5"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="192.5"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-CC3BBECA-9813-49BC-A7AB-DED669E97636" id="BPMNEdge_sid-CC3BBECA-9813-49BC-A7AB-DED669E97636">
+        <omgdi:waypoint x="590.5" y="212.0"></omgdi:waypoint>
+        <omgdi:waypoint x="590.5" y="320.0"></omgdi:waypoint>
+        <omgdi:waypoint x="187.5" y="320.0"></omgdi:waypoint>
+        <omgdi:waypoint x="187.5" y="220.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
