@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--指定特定数据库的jdbc驱动jar包的位置-->
+    <classPathEntry location="d:\\mysql-connector-java-5.1.42.jar"/>
+    <context id="default" targetRuntime="MyBatis3">
+        <!-- optional，旨在创建class时，对注释进行控制 -->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/test?characterEncoding=utf8" userId="root" password="123456" />
+        <!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!-- Model模型生成器,用来生成含有主键key的类，记录类 以及查询Example类
+            targetPackage     指定生成的model生成所在的包名
+            targetProject     指定在该项目下所在的路径
+        -->
+        <javaModelGenerator targetPackage="top.zywork.vo" targetProject="./src/main/java">
+            <!-- 是否允许子包，即targetPackage.schemaName.tableName -->
+            <property name="enableSubPackages" value="false"/>
+            <!-- 是否对model添加 构造函数 -->
+            <property name="constructorBased" value="true"/>
+            <!-- 是否对类CHAR类型的列的数据进行trim操作 -->
+            <property name="trimStrings" value="true"/>
+            <!-- 建立的Model对象是否 不可改变  即生成的Model对象不会有 setter方法，只有构造方法 -->
+            <property name="immutable" value="false"/>
+        </javaModelGenerator>
+        <!--mapper映射文件生成所在的目录 为每一个数据库的表生成对应的SqlMap文件 -->
+        <sqlMapGenerator targetPackage="mapping" targetProject="./src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+        <!-- 客户端代码，生成易于使用的针对Model对象和XML配置文件 的代码
+                type="ANNOTATEDMAPPER",生成Java Model 和基于注解的Mapper对象
+                type="MIXEDMAPPER",生成基于注解的Java Model 和相应的Mapper对象
+                type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
+        -->
+        <!--生成的表的相关配置 还可以配置其它的属性 根据数据库的表名而定 一般而言只需配置tableName就可以了-->
+        <table tableName="t_cash_subject" domainObjectName="CashSubjectVo" ></table>
+        <table tableName="t_cash_accounts" domainObjectName="CashAccountsVo" ></table>
+        <table tableName="t_cooperation_accounts" domainObjectName="CooperationAccountsVo" ></table>
+        <table tableName="t_cooperation_company" domainObjectName="CooperationCompanyVo" ></table>
+        <table tableName="t_cooperation_subject" domainObjectName="CooperationSubjectVo" ></table>
+        <table tableName="t_cooperation_website" domainObjectName="CooperationWebsiteVo" ></table>
+        <table tableName="t_customer_order" domainObjectName="CustomerOrderVo" ></table>
+        <table tableName="t_customer_service" domainObjectName="CustomerServiceVo" ></table>
+        <table tableName="t_house" domainObjectName="HouseVo" ></table>
+        <table tableName="t_landlord" domainObjectName="LandlordVo" ></table>
+        <table tableName="t_module" domainObjectName="ModuleVo" ></table>
+        <table tableName="t_payment_type" domainObjectName="PaymentTypeVo" ></table>
+        <table tableName="t_permission" domainObjectName="PermissionVo" ></table>
+        <table tableName="t_plot" domainObjectName="PlotVo" ></table>
+        <table tableName="t_process" domainObjectName="ProcessVo" ></table>
+        <table tableName="t_rent_pay" domainObjectName="RentPayVo" ></table>
+        <table tableName="t_role" domainObjectName="RoleVo" ></table>
+        <table tableName="t_role_permission" domainObjectName="RolePermissionVo" ></table>
+        <table tableName="t_service_subject" domainObjectName="ServiceSubjectVo" ></table>
+        <table tableName="t_user" domainObjectName="UserVo" ></table>
+        <table tableName="t_user_role" domainObjectName="UserRoleVo" ></table>
+    </context>
+</generatorConfiguration>
